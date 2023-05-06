@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <title>FastApi Demo</title>
+</head>
+
+<body>
+    <!----------------------registr Modal ----------------------------->
+    <div class="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" id="exampleModal">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                        Create new Account
+                    </h1>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            id="logup">Submit</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="field1" />
+                        <label for="field1">email</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="field2" />
+                        <label for="field2">name</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="field3" />
+                        <label for="field3">password</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="field4" />
+                        <label for="field4">password</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!----------------------registr Modal --------------------------------->
+
+    <div class="container">
+        <div class="row bg-warning bg-gradient">
+            <div class="col-12 p-2 d-flex justify-content-between">
+                <a href="user" class="btn btn-primary">
+                    User
+                </a>
+                <a href="files" class="btn btn-primary">
+                    Files
+                </a>
+                <a href="login" class="btn btn-primary">
+                    Login
+                </a>
+                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Register
+                </a>
+                <a href="#" class="btn btn-primary d-none" id="logout">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        connect = () => {
+            let tok = localStorage.getItem("access_token")
+
+            if (tok != "null") {
+                document.getElementById('logout').classList.remove("d-none")
+            }
+        }
+        regist = async () => {
+            if (document.getElementById('field3').value != document.getElementById('field4').value) {
+                alert('password confirm incorrect')
+                return
+            }
+            let url = "adduser"
+            let user = {
+                username: document.getElementById('field1').value,
+                password: document.getElementById('field3').value,
+                name: document.getElementById('field2').value
+            }
+
+            const res = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify(user),
+                cache: "no-cache",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+            })
+
+            data = await res.json();
+            mes = JSON.stringify(data)
+            alert(mes)
+        }
+
+        disconnect = () => {
+            localStorage.setItem("access_token", "null")
+            location.href = "logout"
+        }
+        window.onload = (ev) => {
+            connect()
+            document.getElementById('logout').addEventListener('click', disconnect);
+            document.getElementById('logup').addEventListener('click', regist);
+
+
+
+        }
+
+    </script>
+    <script src="./js/bootstrap.min.js"></script>
+</body>
+
+</html>

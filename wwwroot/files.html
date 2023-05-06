@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <title>FastApi Demo</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row bg-warning bg-gradient">
+            <div class="col-12 p-2">
+                <a href="#" class="btn btn-primary" id="addfile">
+                    Add Files
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <ul id="filelist">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        connect = async () => {
+            
+            let tok = localStorage.getItem("access_token")
+            let url = "files_data"
+
+            const res = await fetch(url, {
+                method: "POST",
+                cache: "no-cache",
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': 'Bearer ' + tok
+                }
+            })
+            let data = await res.json()
+
+            let s = ""
+            let n = data.length
+            
+
+            for (let i = 0; i < n; i++) {
+                s = s + "<li>" + data[i] + "</li>"
+            }
+            document.getElementById('filelist').innerHTML = s
+
+        }
+ 
+
+        createfile = async () => {
+            alert('new file')
+        }
+
+        window.onload = (ev) => {
+            connect()
+            document.getElementById('addfile').addEventListener('click', createfile);
+        }
+
+    </script>
+    <script src="./js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <title>User</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h3>User</h3>
+        <div class="row">
+            <div class="col-lg-4 col-sm-12">
+                user id: <span class="fw-bold" id="id"></span>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+                login: <span class="fw-bold" id="username"></span>
+            </div>
+            <div class="col-lg-4 col-sm-12">
+                name: <span class="fw-bold" id="name"></span>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = async (ev) => {
+            let tok = localStorage.getItem("access_token")
+            let url = "user_data"
+            const res = await fetch(url, {
+                method: "GET",
+                cache: "no-cache",
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': 'Bearer ' + tok
+                }
+            })
+            let data = await res.json()
+            if (data.detail)
+            {
+                alert(data.detail)
+                return
+            }
+            document.getElementById('id').innerText = data.id
+            document.getElementById('username').innerText = data.username
+            document.getElementById('name').innerText = data.name
+
+        }
+    </script>
+</body>
+
+</html>
