@@ -7,28 +7,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <title>FastApi Demo</title>
+
 </head>
+<script>
+    let sendclick = () => {
+        document.getElementById("fileElem").click()
+    }
+    let handleFiles = async (files) => {
+        if (!files.length)
+            return;
+        let tok = localStorage.getItem("access_token")
+        
+        let url = "uploadfiles"
+        //let url = "files_data"
+        
+        let bd = new FormData()
+        //bd.append("files", files[0], files[0].name)
+        for (var i = 0; i < files.length; i++)
+		    bd.append('files', files[i], files[i].name);
+
+        const res = await fetch(url, {
+            method: "POST",
+            body:bd,
+            cache: "no-cache",
+            headers: {
+                'accept': 'application/json',
+                'Authorization': 'Bearer ' + tok,
+                //'Content-Type': 'multipart/form-data'
+            }
+            
+        })
+        const data = await res.json()    
+        const mes = JSON.stringify(data)
+        //alert(mes)
+        connect()
+    }
+</script>
 
 <body>
+    <input type="file" id="fileElem" style="display:none" multiple onchange="handleFiles(this.files)">
     <div class="container">
-        <div class="row bg-warning bg-gradient">
-            <div class="col-12 p-2">
-                <a href="#" class="btn btn-primary" id="addfile">
+        <div class="row">
+            <div class="col-12 p-2 bg-warning bg-gradient">
+                <a href="#" class="btn btn-primary" id="addfile" onclick="sendclick()">
                     Add Files
                 </a>
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
-                <ul id="filelist">
+            <div class="col-12 mt-2 col-12 p-2 bg-warning bg-gradient" style="min-height: 30px;">
+                <ul id="filelist" class="list-group">
                 </ul>
             </div>
         </div>
     </div>
     <script>
-
         connect = async () => {
-            
+
             let tok = localStorage.getItem("access_token")
             let url = "files_data"
 
@@ -44,27 +79,24 @@
 
             let s = ""
             let n = data.length
-            
+
 
             for (let i = 0; i < n; i++) {
-                s = s + "<li>" + data[i] + "</li>"
+                s = s + '<li class="list-group-item">' + data[i] + '</li>'
             }
             document.getElementById('filelist').innerHTML = s
 
         }
- 
 
-        createfile = async () => {
-            alert('new file')
-        }
 
         window.onload = (ev) => {
             connect()
-            document.getElementById('addfile').addEventListener('click', createfile);
         }
 
     </script>
     <script src="./js/bootstrap.min.js"></script>
+
+
 </body>
 
 </html>

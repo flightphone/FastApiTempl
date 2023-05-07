@@ -11,39 +11,39 @@
 
 <body>
     <!----------------------registr Modal ----------------------------->
-    <div class="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" id="exampleModal">
-        <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal fade" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" id="exampleModal">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">
                         Create new Account
                     </h1>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            id="logup">Submit</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" autocomplete="off">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="field1" />
+                        <input type="text" class="form-control mb-3" autocomplete="false" id="field1" />
                         <label for="field1">email</label>
                     </div>
 
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="field2" />
+                        <input type="text" class="form-control mb-3" autocomplete="false" id="field2" />
                         <label for="field2">name</label>
                     </div>
 
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="field3" />
+                        <input type="password" class="form-control mb-3" autocomplete="false" id="field3" />
                         <label for="field3">password</label>
                     </div>
 
                     <div class="form-floating">
-                        <input type="password" class="form-control" id="field4" />
-                        <label for="field4">password</label>
+                        <input type="password" class="form-control mb-3" autocomplete="off" id="field4" />
+                        <label for="field4">Confirm password</label>
                     </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="logup">Submit</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>

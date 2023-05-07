@@ -1,4 +1,4 @@
-from fastapi import Depends, UploadFile
+from fastapi import Depends, UploadFile, File
 from fastapi.responses import HTMLResponse
 import os
 from dependencies import get_api_current_user, gethtml, get_engine, get_current_user
@@ -17,7 +17,7 @@ async def files_info(current_user = Depends(get_current_user)):
     return HTMLResponse(gethtml("files.html"))
 
 @router.post("/uploadfiles")
-async def create_upload_files(current_user = Depends(get_api_current_user), files: list[UploadFile] | None = None):
+async def create_upload_files(files: list[UploadFile]= File(description="Multiple files as UploadFile"), current_user = Depends(get_api_current_user)):
     if not files:
         return {"message": "No file sent"}
     filepath = f"userfiles\\user{current_user['id']}"
