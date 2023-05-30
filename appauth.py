@@ -10,6 +10,11 @@ from dependencies import Sessions, get_api_current_user, gethtml, get_engine
 from fastapi import APIRouter
 router = APIRouter()
 
+@router.get("/alluser")
+async def alluser(eng: Engine = Depends(get_engine)):
+    return model.alluser(eng)
+
+
 @router.post("/adduser")
 async def adduser(data = Body(), eng: Engine = Depends(get_engine)):
     username = data["username"]

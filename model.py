@@ -1,3 +1,4 @@
+import sqlalchemy
 from sqlalchemy import text
 from sqlalchemy import Engine
 from passlib.context import CryptContext
@@ -11,6 +12,7 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 def createbase(engine: Engine):
+    
     sql = ['drop table users', '''
     create table users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,8 +52,16 @@ def authenticate_user(username: str, password: str, engine: Engine):
         r = cur.fetchall()
     if len(r) == 0:
         return False
-
-    hashed_password = r[0][2]
+    row = r[0]._asdict()
+    hashed_password = row["password"]
     if not verify_password(password, hashed_password):
         return False
-    return {"id":r[0][0], "username": r[0][1] , "name": r[0][3]}            
+    return row
+
+def alluser(engine: Engine):
+    sql = sqlalchemy.text("select id, username, password, name from users")
+    r = None
+    with engine.connect() as connection:
+        cur = connection.execute(sql)
+        result = [e._asdict() for e in cur]
+    return result

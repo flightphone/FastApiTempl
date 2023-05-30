@@ -4,10 +4,12 @@ from fastapi.staticfiles import StaticFiles
 from dependencies import gethtml
 import appauth
 import filemanager
+import reactrout
 
 app = FastAPI()
 app.include_router(appauth.router)
 app.include_router(filemanager.router)
+app.include_router(reactrout.app)
 
 @app.exception_handler(403)
 async def custom_http_exception_handler(request, exc):
