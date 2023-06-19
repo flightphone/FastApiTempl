@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy import Engine
 import model
 from fastapi.responses import RedirectResponse
-from dependencies import Sessions, get_api_current_user, gethtml, get_engine
+from dependencies import SessionsLocal, get_api_current_user, gethtml, get_engine
 
 from fastapi import APIRouter
 router = APIRouter()
@@ -32,7 +32,7 @@ async def gettoken(response: Response, form_data: OAuth2PasswordRequestForm = De
             headers={"WWW-Authenticate": "Bearer"},
         )
     tok = str(uuid.uuid4())
-    Sessions[tok] = user
+    SessionsLocal[tok] = user
     # Set an HttpOnly cookie in the response. `httponly=True` prevents 
     # JavaScript from reading the cookie.
     response.set_cookie(

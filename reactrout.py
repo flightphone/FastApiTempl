@@ -8,9 +8,6 @@ import PyFinder
 from fastapi import APIRouter
 app = APIRouter()
 
-@app.get("/app1")
-async def app1():
-     return HTMLResponse(gethtml("/app1/home.html"))
 
 @app.get("/ustore/gettree")
 @app.post("/ustore/gettree")

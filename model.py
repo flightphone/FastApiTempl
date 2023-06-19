@@ -1,7 +1,20 @@
 import sqlalchemy
 from sqlalchemy import text
-from sqlalchemy import Engine
+from sqlalchemy import Engine, Column, Integer, String
+from sqlalchemy.orm import DeclarativeBase, Session
 from passlib.context import CryptContext
+
+class Base(DeclarativeBase): pass
+  
+# создаем модель, объекты которой будут храниться в бд
+class Users(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True, autoincrement="auto")
+    username = Column(String)
+    password = Column(String)
+    name = Column(String)
+  
+
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -12,56 +25,43 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 def createbase(engine: Engine):
+    # создаем таблицы
+    Base.metadata.create_all(bind=engine)
     
-    sql = ['drop table users', '''
-    create table users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT,
-        password TEXT,
-        name TEXT
-    )
-    ''']
-    with engine.connect() as connection:
-        for e in sql:
-            cur = connection.execute(text(e))
-            connection.commit()
-
-
 
 def createuser(username:str, password:str, name:str, engine: Engine):
     try:
-        sql = text("select username from users where username = :u")
-        with engine.connect() as connection:
-            cur = connection.execute(sql, parameters = {"u": username})
-            r = cur.fetchall()
-            if len(r) > 0:
-                return {"message":"this email alredy use"}        
-            
-        sql = text("insert into users (username, password, name) values (:u, :p, :n)")
-        with engine.connect() as connection:
-            cur = connection.execute(sql, parameters = {"u":username, "p": get_password_hash(password), "n":name})
-            connection.commit()
-        return {"message":"ok"}    
+        with Session(autoflush=False, bind=engine) as db:
+            r = db.query(Users).filter(Users.username == username).first()
+            if r:
+                return {"message":"this email alredy use"}            
+            user = Users()
+            user.__dict__["username"] = username
+            user.__dict__["password"] = get_password_hash(password)
+            user.__dict__["name"] = name
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        return {"message": user.__dict__["id"]}    
+
     except Exception as ex:
         return {"message":ex}
 
 def authenticate_user(username: str, password: str, engine: Engine):
-    sql = text("select id, username, password, name from users where username = :u")
-    with engine.connect() as connection:
-        cur = connection.execute(sql, parameters = {"u": username})
-        r = cur.fetchall()
-    if len(r) == 0:
+    with Session(autoflush=False, bind=engine) as db:
+        r = db.query(Users).filter(Users.__dict__["username"] == username).first()
+    if r is None:
         return False
-    row = r[0]._asdict()
+    row = r.__dict__    
     hashed_password = row["password"]
     if not verify_password(password, hashed_password):
         return False
     return row
 
+
 def alluser(engine: Engine):
-    sql = sqlalchemy.text("select id, username, password, name from users")
-    r = None
-    with engine.connect() as connection:
-        cur = connection.execute(sql)
-        result = [e._asdict() for e in cur]
+    with Session(autoflush=False, bind=engine) as db:
+    # получение всех объектов
+        result = db.query(Users).all()
     return result
+    

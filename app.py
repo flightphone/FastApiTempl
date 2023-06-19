@@ -16,6 +16,10 @@ async def custom_http_exception_handler(request, exc):
     return HTMLResponse(gethtml("login.html"))
 
 
+# @app.get("/app")
+# async def app():
+#      return HTMLResponse(gethtml("/home.html"))
+
 @app.get("/")
 async def root():
      return HTMLResponse(gethtml("home.html"))

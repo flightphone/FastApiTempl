@@ -9,10 +9,10 @@ engine = sqlalchemy.create_engine(
 )
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-Sessions = dict()
+SessionsLocal = dict()
 
-#import model
-#model.createbase(engine)
+import model
+model.createbase(engine)
 
 def gethtml(filename):
     with open(f"wwwroot/{filename}", "r", encoding="utf-8") as f:
@@ -29,8 +29,8 @@ async def get_api_current_user(token: str = Depends(oauth2_scheme)):
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    if token in Sessions:
-        return Sessions[token]
+    if token in SessionsLocal:
+        return SessionsLocal[token]
     else:
         raise credentials_exception
     
@@ -43,7 +43,7 @@ async def get_current_user(request: Request):
     token = request.cookies.get("access_token")
     if not token:
         raise credentials_exception
-    if token in Sessions:
-        return Sessions[token]
+    if token in SessionsLocal:
+        return SessionsLocal[token]
     else:
         raise credentials_exception
