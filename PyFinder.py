@@ -5,14 +5,6 @@ from sqlalchemy import Engine
 from modelext import t_rpdeclare, Train
 from sqlalchemy.orm import Session
 
-# создание движка
-#engine = sqlalchemy.create_engine("postgresql+psycopg2://postgres:aA12345678@localhost/sales")
-#SQLALCHEMY_DATABASE_URL = "sqlite:///./app.db"
-#engine = sqlalchemy.create_engine(
-#    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-#)
-
-
 
 class Finder:
     def save(self, SQLParams, KeyF, IdDeclare, mode, engine: Engine):

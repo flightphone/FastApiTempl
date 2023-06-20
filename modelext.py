@@ -22,6 +22,13 @@ class Nusers(Base):
     icq = Column(String) 
     skype = Column(String) 
 
+class GroupUsers(Base):
+    __tablename__ = "t_usergroup"
+    groupname = Column(String, primary_key=True) 
+    type = Column(Integer)
+    caption = Column(String)
 
-t_rpdeclare["132"] = {"key":"id", "table":Train}
-t_rpdeclare["120"] = {"key":"username", "table":Nusers}
+
+t_rpdeclare["132"] = {"key":"id", "table": Train}
+t_rpdeclare["120"] = {"key":"username", "table": Nusers}
+t_rpdeclare["121"] = {"key":"groupname", "table": GroupUsers}
