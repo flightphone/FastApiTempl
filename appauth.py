@@ -5,7 +5,8 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy import Engine
 import model
 from fastapi.responses import RedirectResponse
-from dependencies import SessionsLocal, get_api_current_user, gethtml, get_engine
+from dependencies import SessionsLocal, get_api_current_user, get_engine
+from util import gethtml
 
 from fastapi import APIRouter
 router = APIRouter()

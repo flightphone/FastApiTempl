@@ -1,7 +1,8 @@
 from fastapi import Depends, UploadFile, File
 from fastapi.responses import HTMLResponse
 import os
-from dependencies import get_api_current_user, gethtml, get_engine, get_current_user
+from dependencies import get_api_current_user, get_engine, get_current_user
+from util import gethtml
 
 
 from fastapi import APIRouter

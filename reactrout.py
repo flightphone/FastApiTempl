@@ -2,7 +2,7 @@ import json
 from fastapi.responses import HTMLResponse
 from fastapi import Depends, Form 
 from sqlalchemy import Engine
-from dependencies import gethtml, get_engine
+from dependencies import get_engine
 import PyFinder
 
 from fastapi import APIRouter
@@ -31,5 +31,7 @@ async def FinderStart(id = Form(default="132"), mode = Form(default ="new"), pag
     #return pf.start(id, Fc)
     
 @app.post("/React/exec")
-async def exec():
-    return {'message':'Access denied'}
+async def exec(SQLParams = Form(default = ""), KeyF = Form(default=""), IdDeclare = Form(default=""), mode = Form(defauld="data"), engine: Engine = Depends(get_engine)):
+    pf = PyFinder.Finder()
+    res = pf.save(SQLParams, KeyF, IdDeclare, mode, engine)
+    return res

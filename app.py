@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from dependencies import gethtml
+from util import gethtml
 import appauth
 import filemanager
 import reactrout
+
+
 
 app = FastAPI()
 app.include_router(appauth.router)
@@ -22,6 +24,6 @@ async def custom_http_exception_handler(request, exc):
 
 @app.get("/")
 async def root():
-     return HTMLResponse(gethtml("home.html"))
+     return HTMLResponse(gethtml("index.html"))
 
 app.mount("/", StaticFiles(directory="wwwroot", html=True))

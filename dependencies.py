@@ -1,6 +1,8 @@
 import sqlalchemy
 from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
+import model
+import modelext
 
 #engine = sqlalchemy.create_engine("postgresql+psycopg2://postgres:aA12345678@localhost/sales")
 SQLALCHEMY_DATABASE_URL = "sqlite:///./app.db"
@@ -11,13 +13,9 @@ engine = sqlalchemy.create_engine(
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 SessionsLocal = dict()
 
-import model
+
 model.createbase(engine)
 
-def gethtml(filename):
-    with open(f"wwwroot/{filename}", "r", encoding="utf-8") as f:
-        cnt = f.read()
-    return cnt   
 
 def get_engine():
     yield engine

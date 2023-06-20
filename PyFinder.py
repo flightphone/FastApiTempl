@@ -2,6 +2,8 @@ import json
 import sqlalchemy
 from sqlalchemy import text
 from sqlalchemy import Engine
+from modelext import t_rpdeclare, Train
+from sqlalchemy.orm import Session
 
 # создание движка
 #engine = sqlalchemy.create_engine("postgresql+psycopg2://postgres:aA12345678@localhost/sales")
@@ -13,6 +15,49 @@ from sqlalchemy import Engine
 
 
 class Finder:
+    def save(self, SQLParams, KeyF, IdDeclare, mode, engine: Engine):
+        try:
+            
+            params = json.loads(SQLParams)
+            table = t_rpdeclare[IdDeclare]["table"]
+            key = t_rpdeclare[IdDeclare]["key"]
+            keyval = params[key]
+            with Session(autoflush=False, bind=engine) as db:
+                if (keyval is None or keyval == ""):
+                    action = "add"
+                    row = table()
+                else:    
+                    row = db.query(table).filter(table.__dict__[key] == keyval).first()
+                    if mode == "delete":
+                        db.delete(row)
+                        db.commit()
+                        return {"message":"OK"}
+                    
+                    if row!=None:
+                        action = "update"  
+                    else:
+                        action = "add"    
+                        row = table()
+
+                for k, val in params.items():
+                    if (k == key and val == "" and action=="add") or (k == key and action == "update"):
+                        continue
+                    if val == "":
+                        continue
+                    row.__setattr__(k, val)
+                
+                if action == "update":
+                    db.commit()
+                else:    
+                    db.add(row)
+                    db.commit()
+                    db.refresh(row)
+                    keyval = row.__dict__[key]
+
+                return {"message":"OK", "ColumnTab":[key], "MainTab":[{key:keyval}]}
+        except Exception as ex:
+            return {"message": str(ex)}
+
     def CompilerFilterOrder(self):
         if self.Fcols == None:
             return
