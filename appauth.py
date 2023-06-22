@@ -1,15 +1,23 @@
 import uuid
-from fastapi import Depends, Body, HTTPException, status, Response 
+from fastapi import Depends, Body, HTTPException, status, Request, Response 
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import HTMLResponse
 from sqlalchemy import Engine
 import model
 from fastapi.responses import RedirectResponse
 from dependencies import SessionsLocal, get_api_current_user, get_engine
-from util import gethtml
-
+from setting import gethtml
 from fastapi import APIRouter
+from testteml import renderhome
 router = APIRouter()
+
+appurl = "/app2" 
+
+@router.get(appurl)
+async def home(request:Request, engine: Engine = Depends(get_engine)):
+    return renderhome(request, engine)
+    #return gethtml("home.html", {"request": request})
+    #return HTMLResponse(gethtml("/home.html"))
 
 @router.get("/alluser")
 async def alluser(eng: Engine = Depends(get_engine)):
@@ -44,8 +52,8 @@ async def gettoken(response: Response, form_data: OAuth2PasswordRequestForm = De
     return {"access_token": tok, "token_type": "bearer"}
 
 @router.get("/login", response_class=HTMLResponse)
-async def login(backUrl:str = ""):
-    return gethtml("login.html")
+async def login(request:Request, backUrl:str = ""):
+    return gethtml("login.html", {"request": request})
 
 @router.get('/logout')
 async def logout(response: Response):
@@ -54,7 +62,7 @@ async def logout(response: Response):
         value="-", 
         httponly=True
     )
-    return RedirectResponse("/", headers = response.headers)
+    return RedirectResponse(appurl, headers = response.headers)
 
 @router.get("/user_data")
 async def user_data(current_user = Depends(get_api_current_user)):

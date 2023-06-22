@@ -1,8 +1,7 @@
 import json
-import sqlalchemy
 from sqlalchemy import text
 from sqlalchemy import Engine
-from modelext import t_rpdeclare, Train
+from modelext import t_rpdeclare
 from sqlalchemy.orm import Session
 
 

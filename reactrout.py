@@ -1,12 +1,16 @@
 import json
-from fastapi.responses import HTMLResponse
-from fastapi import Depends, Form 
+from fastapi import Depends, Form, Request 
 from sqlalchemy import Engine
 from dependencies import get_engine
+from setting import gethtml
 import PyFinder
 
 from fastapi import APIRouter
 app = APIRouter()
+
+@app.get("/app1")
+async def home(request: Request):
+    gethtml("index.html", {"request": request})
 
 
 @app.get("/ustore/gettree")

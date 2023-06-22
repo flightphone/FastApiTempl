@@ -1,8 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from util import gethtml
+from setting import gethtml
 import appauth
 import filemanager
 import reactrout
@@ -27,16 +26,16 @@ app.include_router(filemanager.router)
 app.include_router(reactrout.app)
 
 @app.exception_handler(403)
-async def custom_http_exception_handler(request, exc):
-    return HTMLResponse(gethtml("login.html"))
+async def custom_http_exception_handler(request:Request, exc):
+    #return HTMLResponse(gethtml("/login.html"))
+    return gethtml("login.html", {"request": request})
 
-
-# @app.get("/app")
-# async def app():
-#      return HTMLResponse(gethtml("/home.html"))
 
 @app.get("/")
-async def root():
-     return HTMLResponse(gethtml("index.html"))
+async def root(request: Request):
+    #return HTMLResponse(gethtml("/index.html"))
+    return gethtml("index.html", {"request": request})
 
 app.mount("/", StaticFiles(directory="wwwroot", html=True))
+
+

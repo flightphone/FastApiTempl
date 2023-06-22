@@ -1,8 +1,7 @@
-from fastapi import Depends, UploadFile, File
-from fastapi.responses import HTMLResponse
+from fastapi import Depends, UploadFile, File, Request
 import os
 from dependencies import get_api_current_user, get_engine, get_current_user
-from util import gethtml
+from setting import gethtml
 
 
 from fastapi import APIRouter
@@ -10,12 +9,12 @@ router = APIRouter()
 
 
 @router.get("/user")
-async def userinfo(current_user = Depends(get_current_user)):
-    return HTMLResponse(gethtml("user.html"))
+async def userinfo(request:Request, current_user = Depends(get_current_user)):
+    return gethtml("user.html", {"request": request})
 
 @router.get("/files")
-async def files_info(current_user = Depends(get_current_user)):
-    return HTMLResponse(gethtml("files.html"))
+async def files_info(request:Request, current_user = Depends(get_current_user)):
+    return gethtml("files.html", {"request": request})
 
 @router.post("/uploadfiles")
 async def create_upload_files(files: list[UploadFile]= File(description="Multiple files as UploadFile"), current_user = Depends(get_api_current_user)):

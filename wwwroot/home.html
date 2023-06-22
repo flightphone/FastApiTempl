@@ -7,11 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <title>FastApi Demo</title>
+    <style>
+        table {
+            width: 80%;
+            margin: 10px auto;
+        }
+
+        td div {
+            font-weight: bold;
+            background-color: aqua;
+        }
+    </style>
 </head>
 
 <body>
     <!----------------------registr Modal ----------------------------->
-    <div class="modal fade" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" id="exampleModal">
+    <div class="modal fade" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" id="exampleModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -50,7 +62,7 @@
     </div>
     <!----------------------registr Modal --------------------------------->
 
-    <div class="container">
+    <div class="container dark">
         <div class="row bg-warning bg-gradient">
             <div class="col-12 p-2 d-flex justify-content-between">
                 <a href="user" class="btn btn-primary">
@@ -73,6 +85,47 @@
                 </a>
             </div>
         </div>
+
+        <table>
+            <th>
+                <tr>
+                   
+                    <td>
+                        <div>username</div>
+                    </td>
+                    <td>
+                        <div>fullname</div>
+                    </td>
+                    <td>
+                        <div>description</div>
+                    </td>
+                    
+                    <td>
+                        <div>
+                            Action
+                        </div>
+                    </td>
+                </tr>
+            </th>
+            <tbody>
+                {% for row in mainTab %}
+                <tr>
+                    <td>
+                        {{row.username}}
+                    </td>
+                    <td>
+                        {{row.fullname}}
+                    </td>
+                    <td>
+                        {{row.description}}
+                    </td>
+
+                    <td><a href="edit/{{row.username}}">edit</a> | <a href="delete/{{row.username}}">delete</a></td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
     </div>
     <script>
 
