@@ -10,7 +10,8 @@ app = APIRouter()
 
 @app.get("/app1")
 async def home(request: Request):
-    gethtml("index.html", {"request": request})
+    return gethtml("index.html", {"request": request})
+
 
 
 @app.get("/ustore/gettree")

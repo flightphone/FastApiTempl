@@ -117,6 +117,7 @@ class Finder:
 
         
         with engine.connect() as connection:
+            
             cur = connection.execute(text(sqltotal))
             #r = cur.fetchall()
             r = [e._asdict() for e in cur]

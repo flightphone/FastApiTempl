@@ -89,17 +89,13 @@
         <table>
             <th>
                 <tr>
-                   
+
+                    {% for key, _ in mainTab[0].items() %}
                     <td>
-                        <div>username</div>
+                        <div>{{key}}</div>
                     </td>
-                    <td>
-                        <div>fullname</div>
-                    </td>
-                    <td>
-                        <div>description</div>
-                    </td>
-                    
+                    {% endfor %}
+
                     <td>
                         <div>
                             Action
@@ -110,15 +106,13 @@
             <tbody>
                 {% for row in mainTab %}
                 <tr>
+                    {% for _ , val in row.items() %}
                     <td>
-                        {{row.username}}
+                        {% if val != None %}
+                        {{val}}
+                        {% endif %}
                     </td>
-                    <td>
-                        {{row.fullname}}
-                    </td>
-                    <td>
-                        {{row.description}}
-                    </td>
+                    {% endfor %}
 
                     <td><a href="edit/{{row.username}}">edit</a> | <a href="delete/{{row.username}}">delete</a></td>
                 </tr>
